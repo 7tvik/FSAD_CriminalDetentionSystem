@@ -1,0 +1,113 @@
+%%{init: {'theme':'base','themeVariables':{'primaryColor':'#eef2f7','primaryBorderColor':'#1f4e79','lineColor':'#1f4e79','fontSize':'12px'}}}%%
+classDiagram
+    direction LR
+
+    class User {
+        +Long id
+        +String username
+        +String email
+        +String passwordHash
+        +String fullName
+        +boolean active
+    }
+    class Role {
+        +Long id
+        +String name
+        +String description
+    }
+    class Permission {
+        +Long id
+        +String name
+    }
+    class Staff {
+        +Long id
+        +String staffNumber
+        +String fullName
+        +String rankTitle
+        +boolean active
+    }
+    class Prisoner {
+        +Long id
+        +String prisonerNumber
+        +String firstName
+        +String lastName
+        +LocalDate admissionDate
+        +PrisonerStatus status
+        +LocalDate expectedReleaseDate
+    }
+    class CaseRecord {
+        +Long id
+        +String caseNumber
+        +String crimeType
+        +String court
+        +CaseStatus status
+    }
+    class SurrenderedArticle {
+        +Long id
+        +String name
+        +int quantity
+        +ReturnStatus returnStatus
+    }
+    class ReleaseRecord {
+        +Long id
+        +LocalDate expectedReleaseDate
+        +ReleaseType releaseType
+        +ReleaseStatus status
+        +LocalDate actualReleaseDate
+    }
+    class DutyRegister {
+        +Long id
+        +String location
+        +LocalDate dutyDate
+        +LocalTime startTime
+        +LocalTime endTime
+    }
+    class InterviewRequest {
+        +Long id
+        +String visitorName
+        +LocalDate requestedDate
+        +InterviewStatus status
+    }
+    class Movement {
+        +Long id
+        +PersonType personType
+        +MovementType movementType
+        +LocalDateTime timeOut
+        +LocalDateTime expectedReturn
+        +MovementStatus status
+    }
+    class CourtHearing {
+        +Long id
+        +String court
+        +LocalDate hearingDate
+        +CourtStatus status
+        +String outcome
+    }
+    class Notification {
+        +Long id
+        +String type
+        +String title
+        +boolean readFlag
+    }
+    class AuditLog {
+        +Long id
+        +String action
+        +String entityType
+        +String oldValue
+        +String newValue
+    }
+
+    User "1" --> "*" Role : has
+    Role "*" --> "*" Permission : grants
+    User "1" --> "0..1" Staff : may link
+    Prisoner "1" --> "*" CaseRecord : charged in
+    Prisoner "1" --> "*" SurrenderedArticle : surrenders
+    Prisoner "1" --> "*" ReleaseRecord : released by
+    Prisoner "1" --> "*" InterviewRequest : visited for
+    Prisoner "1" --> "*" CourtHearing : produced for
+    CaseRecord "1" --> "*" CourtHearing : heard
+    Staff "1" --> "*" DutyRegister : assigned
+    Staff "1" --> "*" Movement : escorts
+    Movement "1" --> "0..1" CourtHearing : specializes
+    User "1" --> "*" Notification : receives
+    User "1" --> "*" AuditLog : acts in

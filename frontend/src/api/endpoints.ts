@@ -84,13 +84,15 @@ export const releaseApi = {
   diaryExportUrl: '/releases/diary/export',
 };
 
+type ReleaseReport = { releases: ReleaseRecord[] };
+
 export const reportApi = {
   dailyReleases: (date: string) =>
-    http.get<ReleaseRecord[]>('/reports/releases/daily', { params: { date } }).then((r) => r.data),
+    http.get<ReleaseReport>('/reports/releases/daily', { params: { date } }).then((r) => r.data.releases),
   monthlyReleases: (year: number, month: number) =>
-    http.get<ReleaseRecord[]>('/reports/releases/monthly', { params: { year, month } }).then((r) => r.data),
+    http.get<ReleaseReport>('/reports/releases/monthly', { params: { year, month } }).then((r) => r.data.releases),
   upcomingReleases: (days: number) =>
-    http.get<ReleaseRecord[]>('/reports/releases/upcoming', { params: { days } }).then((r) => r.data),
+    http.get<ReleaseReport>('/reports/releases/upcoming', { params: { days } }).then((r) => r.data.releases),
   prisonerStats: () =>
     http.get<StatItem[]>('/reports/statistics/prisoners').then((r) => r.data),
   caseStats: () => http.get<StatItem[]>('/reports/statistics/cases').then((r) => r.data),
